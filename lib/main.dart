@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import './result.dart';
 
 import './quiz.dart';
 import './result.dart';
@@ -19,8 +17,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-  var _totalScore = 0;
+  int _currentQuestion = 0;
+  int _totalScore = 0;
+
   final _questions = const [
     {
       'questionText': 'Which\'s capital of hytry?',
@@ -30,15 +29,17 @@ class _MyAppState extends State<MyApp> {
         {'text': 'rtyjyt', 'score': 0},
         {'text': 'ghjytuj6', 'score': 0}
       ]
-    }, {
+    },
+    {
       'questionText': 'Which\'s mother toung of India?',
       'answers': [
         {'text': 'Marathi', 'score': 0},
         {'text': 'Gujarati', 'score': 0},
         {'text': 'Tamil', 'score': 0},
-        {'text': 'Hindi', 'score':10}
+        {'text': 'Hindi', 'score': 10}
       ]
-    }, {
+    },
+    {
       'questionText': 'Who\'s prime ministor of Bangladesh?',
       'answers': [
         {'text': 'iygfelfyh', 'score': 10},
@@ -46,7 +47,8 @@ class _MyAppState extends State<MyApp> {
         {'text': 'greter bghfd', 'score': 0},
         {'text': 'grgfr gr', 'score': 0}
       ]
-    },{
+    },
+    {
       'questionText': 'Who\'s president of Bangladesh?',
       'answers': [
         {'text': 'rtger r', 'score': 0},
@@ -54,7 +56,8 @@ class _MyAppState extends State<MyApp> {
         {'text': 'rgr rtgfrw', 'score': 10},
         {'text': 'yu Pattreil', 'score': 0}
       ]
-    },{
+    },
+    {
       'questionText': 'Who\'s Chief Minister of rte5rt?',
       'answers': [
         {'text': 're Pahsedetel', 'score': 0},
@@ -62,8 +65,10 @@ class _MyAppState extends State<MyApp> {
         {'text': 'Jayesh Rarrtdadiya', 'score': 0},
         {'text': 'rtgr trgrt', 'score': 0}
       ]
-    }, {
-      'questionText': 'Which of the following was the author of the Bangladesh?',
+    },
+    {
+      'questionText':
+          'Which of the following was the author of the Bangladesh?',
       'answers': [
         {'text': 'df', 'score': 0},
         {'text': 'drtgre', 'score': 0},
@@ -75,49 +80,32 @@ class _MyAppState extends State<MyApp> {
 
   void _resetQuiz() {
     setState(() {
-      _questionIndex = 0;
+      _currentQuestion = 0;
       _totalScore = 0;
     });
   }
 
-  void _answerQuestions(int score) {
-    _totalScore += score;
-   
-    setState(() {
-      _questionIndex = _questionIndex + 1;
-    });
-    print('_questionIndex:$_questionIndex');
-  }
-// WidgetsBinding.instance?._answerQuestions((timeStamp) {
-//   setState(() {
-//     print('i m in set state');
-//     _questionIndex = _questionIndex + 1;
-//   });
-// });
-  
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_MyAppState) {
-      _answerQuestions;
-      _resetQuiz();
-    });
+  void _answerHandler() {
+    if (_currentQuestion < _questions.length - 1) {
+      setState(() {
+        _currentQuestion += 1;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('Quiz App'),
         ),
-        body: _questionIndex < _questions.length
-            ? Quiz(
-                questions: _questions,
-                answerQuestions: _answerQuestions,
-                questionIndex: _questionIndex)
-            : Result(_totalScore, _resetQuiz),
+        body: _currentQuestion == _questions.length - 1
+            ? Result(20, _resetQuiz)
+            : Quiz(
+                question: _questions[_currentQuestion],
+                answerHandler: _answerHandler,
+              ),
       ),
     );
   }
