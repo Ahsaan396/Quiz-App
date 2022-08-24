@@ -3,110 +3,119 @@ import 'package:flutter/material.dart';
 import './quiz.dart';
 import './result.dart';
 
-/*void main() {
-  runApp(MyApp());
-}*/
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyAppState();
-  }
+const MyApp({Key? key}) : super(key: key);
+
+@override
+State<StatefulWidget> createState() {
+	return _MyAppState();
+}
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentQuestion = 0;
-  int _totalScore = 0;
+final _questions = const [
+	{
+	'questionText': 'Q1. Who created Flutter?',
+	'answers': [
+		{'text': 'Facebook', 'score': -2},
+		{'text': 'Adobe', 'score': -2},
+		{'text': 'Google', 'score': 10},
+		{'text': 'Microsoft', 'score': -2},
+	],
+	},
+	{
+	'questionText': 'Q2. What is Flutter?',
+	'answers': [
+		{'text': 'Android Development Kit', 'score': -2},
+		{'text': 'IOS Development Kit', 'score': -2},
+		{'text': 'Web Development Kit', 'score': -2},
+		{
+		'text':
+			'SDK to build beautiful IOS, Android, Web & Desktop Native Apps',
+		'score': 10
+		},
+	],
+	},
+	{
+	'questionText': ' Q3. Which programing language is used by Flutter',
+	'answers': [
+		{'text': 'Ruby', 'score': -2},
+		{'text': 'Dart', 'score': 10},
+		{'text': 'C++', 'score': -2},
+		{'text': 'Kotlin', 'score': -2},
+	],
+	},
+	{
+	'questionText': 'Q4. Who created Dart programing language?',
+	'answers': [
+		{'text': 'Lars Bak and Kasper Lund', 'score': 10},
+		{'text': 'Brendan Eich', 'score': -2},
+		{'text': 'Bjarne Stroustrup', 'score': -2},
+		{'text': 'Jeremy Ashkenas', 'score': -2},
+	],
+	},
+	{
+	'questionText':
+		'Q5. Is Flutter for Web and Desktop available in stable version?',
+	'answers': [
+		{
+		'text': 'Yes',
+		'score': -2,
+		},
+		{'text': 'No', 'score': 10},
+	],
+	},
+];
 
-  final _questions = const [
-    {
-      'questionText': 'Which\'s capital of hytry?',
-      'answers': [
-        {'text': 'tytyt', 'score': 0},
-        {'text': 'Nektjteyhw Detrywlhi', 'score': 10},
-        {'text': 'rtyjyt', 'score': 0},
-        {'text': 'ghjytuj6', 'score': 0}
-      ]
-    },
-    {
-      'questionText': 'Which\'s mother toung of India?',
-      'answers': [
-        {'text': 'Marathi', 'score': 0},
-        {'text': 'Gujarati', 'score': 0},
-        {'text': 'Tamil', 'score': 0},
-        {'text': 'Hindi', 'score': 10}
-      ]
-    },
-    {
-      'questionText': 'Who\'s prime ministor of Bangladesh?',
-      'answers': [
-        {'text': 'iygfelfyh', 'score': 10},
-        {'text': 'fgfd vbgfdg', 'score': 0},
-        {'text': 'greter bghfd', 'score': 0},
-        {'text': 'grgfr gr', 'score': 0}
-      ]
-    },
-    {
-      'questionText': 'Who\'s president of Bangladesh?',
-      'answers': [
-        {'text': 'rtger r', 'score': 0},
-        {'text': 'rtgr Obrtgreama', 'score': 0},
-        {'text': 'rgr rtgfrw', 'score': 10},
-        {'text': 'yu Pattreil', 'score': 0}
-      ]
-    },
-    {
-      'questionText': 'Who\'s Chief Minister of rte5rt?',
-      'answers': [
-        {'text': 're Pahsedetel', 'score': 0},
-        {'text': 'rfr g', 'score': 10},
-        {'text': 'Jayesh Rarrtdadiya', 'score': 0},
-        {'text': 'rtgr trgrt', 'score': 0}
-      ]
-    },
-    {
-      'questionText':
-          'Which of the following was the author of the Bangladesh?',
-      'answers': [
-        {'text': 'df', 'score': 0},
-        {'text': 'drtgre', 'score': 0},
-        {'text': 'drtgretg Bhatta', 'score': 0},
-        {'text': 'brrfgr', 'score': 10}
-      ]
-    },
-  ];
+var _questionIndex = 0;
+var _totalScore = 0;
 
-  void _resetQuiz() {
-    setState(() {
-      _currentQuestion = 0;
-      _totalScore = 0;
-    });
-  }
+void _resetQuiz() {
+	setState(() {
+	_questionIndex = 0;
+	_totalScore = 0;
+	});
+}
 
-  void _answerHandler() {
-    if (_currentQuestion < _questions.length - 1) {
-      setState(() {
-        _currentQuestion += 1;
-      });
-    }
-  }
+void _answerQuestion(int score) {
+	_totalScore += score;
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Quiz App'),
-        ),
-        body: _currentQuestion == _questions.length - 1
-            ? Result(20, _resetQuiz)
-            : Quiz(
-                question: _questions[_currentQuestion],
-                answerHandler: _answerHandler,
-              ),
-      ),
-    );
-  }
+	setState(() {
+	_questionIndex = _questionIndex + 1;
+	});
+	// ignore: avoid_print
+	print(_questionIndex);
+	if (_questionIndex < _questions.length) {
+	// ignore: avoid_print
+	print('We have more questions!');
+	} else {
+	// ignore: avoid_print
+	print('No more questions!');
+	}
+}
+
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	home: Scaffold(
+		appBar: AppBar(
+		title: const Text('Quiz App'),
+		backgroundColor: Color.fromARGB(255, 43, 44, 84),
+		),
+		body: Padding(
+		padding: const EdgeInsets.all(30.0),
+		child: _questionIndex < _questions.length
+			? Quiz(
+				answerQuestion: _answerQuestion,
+				questionIndex: _questionIndex,
+				questions: _questions,
+				) //Quiz
+			: Result(_totalScore, _resetQuiz),
+		), //Padding
+	), //Scaffold
+	debugShowCheckedModeBanner: false,
+	); //MaterialApp
+}
 }
